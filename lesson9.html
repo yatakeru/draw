@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang = "ja">
+  <head>
+    <meta charset = "utf-8">
+    <title>ドット絵</title>
+    <style>
+        table {
+          border-collapse:collapse;
+        }
+        td {
+          border:1px solid;
+          width:30px;
+          height:30px;
+        }
+    </style>
+  </head>
+  <body>
+    <div>
+      <table id = "Tbl"></table>
+      <br>
+      <table id = "colTbl"><tr></tr></table>
+    </div>
+    <div class = "kinou">
+      <input type = "button" value = "消去" onclick = clearCell()>
+      <input type = "button" value = "画像変換" onclick = copyCell()>
+      <canvas id = "picture" width = "16" height = "16" style = "border:1px solid;"></canvas>
+    </div>
+
+    <script>
+      var Matrix_y = 16;
+      var Matrix_x = 16;
+      var index_color = "black";
+      var tbl = document.getElementById('Tbl');
+      var coltbl = document.getElementById('colTbl');
+      var cvs = document.getElementById('picture');
+      var ctx = cvs.getContext("2d");
+
+      function mainTable(){
+        for(var y = 0; y < Matrix_y; y++){
+          var row = tbl.insertRow(-1);
+          for(var x = 0; x < Matrix_x; x++){
+            var cell = row.insertCell(-1);
+            cell.onclick = function(){
+              this.style.backgroundColor = index_color;
+            }
+          }
+        }
+      }
+
+
+      var Col_Sample = ["black", "gray", "silver", "white", "maroon", "red", "orange", "gold", "yellow", "lime", "cyan", "blue", "magenta", "violet", "pink"]
+
+
+      function colorTable(){
+        for(var x = 0; x < Col_Sample.length; x++){
+         var cell = coltbl.rows[0].insertCell(-1);
+         cell.style.backgroundColor = Col_Sample[x];
+         cell.innerHTML = '<img src = "pensaki.png ">';
+         cell.style.padding = '0px';
+         cell.style.border = '0px';
+         cell.onclick = function(){
+            index_color = this.style.backgroundColor;
+         }
+        }
+      }
+
+      function clearCell(){
+        for(var y = 0; y < Matrix_y; y++){
+          for(var x = 0; x < Matrix_x; x++){
+            tbl.rows[y].cells[x].style.backgroundColor = 'white';
+          }
+        }
+        ctx.fillStyle = "white";
+        ctx.fillRect(0,0,16,16);
+      }
+
+      function copyCell(){
+        for(var y = 0; y < Matrix_y; y++){
+          for(var x = 0; x < Matrix_x; x++){
+            var col = tbl.rows[y].cells[x].style.backgroundColor;
+            ctx.fillStyle = col;
+            ctx.fillRect(x,y,1,1);
+          }
+        }
+      }
+
+
+      window.onload = function(){
+        mainTable();
+        colorTable();
+        clearCell();
+      }
+    </script>
+  </body>
+</html>
